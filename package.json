@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "Simplifica la definición de atributos para crear un modelo Sequelize.",
   "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha --recursive test",
+    "lint": "./node_modules/.bin/eslint ./lib"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/waquispe/insac-validator.git"
+    "url": "git+https://github.com/waquispe/insac-field.git"
   },
   "keywords": [
     "insac",
@@ -19,7 +23,17 @@
   "author": "Wilmer Alex Quispe Quispe <q.wilmer.alex@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/waquispe/insac-validator/issues"
+    "url": "https://github.com/waquispe/insac-field/issues"
   },
-  "homepage": "https://github.com/waquispe/insac-validator#readme"
+  "homepage": "https://github.com/waquispe/insac-field#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.17.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^5.0.0"
+  }
 }
