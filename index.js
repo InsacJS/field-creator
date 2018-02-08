@@ -1,1 +1,1 @@
-module.exports = require('./src/insac-field')
+module.exports = require('./lib/insac-field')

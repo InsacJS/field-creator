@@ -6,6 +6,7 @@ Simplifica la definición de atributos para crear un modelo Sequelize.
 - Crea objetos utilizando atributos predefinidos.
 
 # Ejemplo 1
+Archivo `libro.model.js`
 ``` js
 const { Field } = require('insac-field')
 
@@ -19,6 +20,7 @@ module.exports = (sequelize, Sequelize) => {
 ```
 
 # Ejemplo 2.
+Archivo `index.js`
 ``` js
 const { Field, FieldContainer } = require('insac-field')
 
