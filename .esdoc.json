@@ -15,14 +15,6 @@
           "title": "Insac Field",
           "description": "Simplifica la definición de atributos para crear un modelo Sequelize.",
           "repository": "https://github.com/waquispe/insac-field"
-        },
-        "manual": {
-          "index": "./manual/index.md",
-          "files": [
-            "./manual/overview.md",
-            "./manual/installation.md",
-            "./manual/tutorial.md"
-          ]
         }
       }
     }
