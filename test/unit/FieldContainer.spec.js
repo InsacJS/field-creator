@@ -41,16 +41,6 @@ describe('\n - Clase: FieldContainer\n', () => {
     })
   })
 
-  describe(` Método: isTHIS`, () => {
-    it('Ejecución con parámetros', () => {
-      const THIS = FieldContainer.THIS
-      const field = THIS()
-      const isThis = FieldContainer.isTHIS(field)
-      expect(isThis).to.be.an('boolean')
-      expect(isThis).to.equal(true)
-    })
-  })
-
   describe(` Método: group`, () => {
     it('Ejecución con parámetros', () => {
       const fieldContainer = new FieldContainer()
@@ -70,8 +60,6 @@ describe('\n - Clase: FieldContainer\n', () => {
       expect(BODY).to.have.property('precio')
       expect(BODY.titulo).to.be.an('object')
       expect(BODY.precio).to.be.an('object')
-      expect(FieldContainer.isTHIS(OBJ.titulo)).to.equal(true)
-      expect(FieldContainer.isTHIS(BODY.titulo)).to.equal(true)
       expect(fieldContainer.models.libro('titulo')).to.not.have.property('allowNull')
       expect(fieldContainer.models.libro('precio')).to.not.have.property('allowNull')
       expect(BODY.titulo).to.have.property('allowNull', false)
