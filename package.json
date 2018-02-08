@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/waquispe/insac-field#readme",
   "dependencies": {
+    "handlebars": "^4.0.11",
     "pg": "^7.4.1",
     "sequelize": "^4.32.7"
   },
