@@ -101,6 +101,11 @@ container.define('libro', {
 })
 ```
 
+También podemos importar los atributos, indicando la carpeta donde se encuentran los modelos sequelize.
+``` js
+container.import('src/models', { ext: '.model.js' })
+```
+
 Podemos construir objetos en base a los atributos almacenados.
 ``` js
 const OUTPUT = {
