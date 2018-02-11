@@ -125,9 +125,11 @@ const INPUT = {
 
 Podemos construir objetos a partir de un modelo.
 ``` js
+const { THIS } = require('insac-field')
+
 const OUTPUT = container.group('libro', {
-  id: container.THIS()
-  titulo: container.THIS(),
-  precio: container.THIS()
+  id: THIS()
+  titulo: THIS(),
+  precio: THIS()
 })
 ```
