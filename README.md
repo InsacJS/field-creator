@@ -15,7 +15,7 @@ Tipos básicos:
 |------------|-------------------------------------------------------------------------|
 | `STRING`   | Atributo para representar cadenas de texto.                             |
 | `INTEGER`  | Atributo para representar números enteros.                              |
-| `FLOAT`    | Atributo para representar números coma flotante.                        |
+| `FLOAT`    | Atributo para representar números en coma flotante.                     |
 | `ENUM`     | Atributo para representar valores.                                      |
 
 Tipos personalizados:
