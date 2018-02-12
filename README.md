@@ -127,9 +127,14 @@ Podemos construir objetos a partir de un modelo.
 ``` js
 const { THIS } = require('insac-field')
 
-const OUTPUT = container.group('libro', {
-  id: THIS()
+const INPUT = container.group('libro', {
   titulo: THIS(),
-  precio: THIS()
+  precio: THIS({ allowNull: false }),
+  custom: THIS('model', { allowNull: false }),
+  autor: {
+    nombre: THIS()
+  }
 })
 ```
+La función `THIS`, indica que el campo es parte del modelo definido en el `group`.
+Si se quiere obtener el campo de otro modelo, se le pasa como primer argumento el nombre del otro modelo.
