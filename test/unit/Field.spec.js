@@ -1,5 +1,8 @@
 /* global describe it expect */
-const Field = require('../../lib/class/Field')
+const Field     = require('../../lib/class/Field')
+const path      = require('path')
+const Sequelize = require('sequelize')
+const DB_CONFIG = require('./db_config')
 
 describe('\n - Clase: Field\n', () => {
   describe(` Método: ID`, () => {
@@ -95,6 +98,33 @@ describe('\n - Clase: Field\n', () => {
       expect(FIELD).to.have.property('validate')
       expect(FIELD.validate).to.have.property('isIn')
       expect(FIELD.validate.isIn[0]).to.be.an('array').to.have.lengthOf(values.length)
+    })
+  })
+
+  describe(` Método: group`, () => {
+    it('Ejecución con parámetros', () => {
+      const sequelize = new Sequelize(DB_CONFIG.database, DB_CONFIG.username, DB_CONFIG.password, DB_CONFIG.params)
+      const pathModels = path.resolve(__dirname, './models')
+      sequelize.import(`${pathModels}/autor.model.js`)
+      sequelize.import(`${pathModels}/libro.model.js`)
+      sequelize.models.autor.associate(sequelize.models)
+      sequelize.models.libro.associate(sequelize.models)
+      const THIS = Field.THIS
+      const RESULT1 = Field.group(sequelize.models.libro, {
+        id_libro : THIS(),
+        titulo   : THIS(),
+        precio   : THIS()
+      })
+      const RESULT2 = Field.group(sequelize.models.libro, {
+        titulo : THIS({ allowNull: false }),
+        precio : THIS({ allowNull: true })
+      })
+      expect(sequelize.models.libro.attributes.titulo).to.not.have.property('allowNull')
+      expect(sequelize.models.libro.attributes.precio).to.not.have.property('allowNull')
+      expect(RESULT1.titulo).to.not.have.property('allowNull')
+      expect(RESULT1.precio).to.not.have.property('allowNull')
+      expect(RESULT2.titulo).to.have.property('allowNull', false)
+      expect(RESULT2.precio).to.have.property('allowNull', true)
     })
   })
 })

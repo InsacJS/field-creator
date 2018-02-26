@@ -1,9 +1,18 @@
 const { Field } = require(global.LIB)
 
 module.exports = (sequelize, Sequelize) => {
-  return sequelize.define('libro', {
-    id: Field.ID(),
-    titulo: Field.STRING(10),
-    precio: Field.FLOAT()
+  const MODEL = sequelize.define('libro', {
+    id_libro : Field.ID(),
+    titulo   : Field.STRING(),
+    precio   : Field.FLOAT()
   })
+
+  MODEL.associate = (models) => {
+    models.libro.belongsTo(models.autor, {
+      as         : 'autor',
+      foreignKey : { name: 'fid_autor', targetKey: 'id_autor', allowNull: false }
+    })
+  }
+
+  return MODEL
 }
