@@ -5,7 +5,7 @@ Simplifica la definición de atributos para crear un modelo Sequelize.
 # Características
 
 - Define atributos con la propiedad validate incluida.
-- Crea objetos utilizando atributos predefinidos.
+- Crea objetos de attributos.
 
 ## Atributos soportados:
 
