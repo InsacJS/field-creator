@@ -1,5 +1,5 @@
 {
-  "name": "insac-field",
+  "name": "fields-creator",
   "version": "1.0.0",
   "description": "Simplifica la definición de atributos para crear un modelo Sequelize.",
   "main": "index.js",
@@ -13,10 +13,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/waquispe/insac-field.git"
+    "url": "git+https://github.com/waquispe/fields-creator.git"
   },
   "keywords": [
-    "insac",
+    "sequelize",
     "field",
     "web",
     "service"
@@ -24,11 +24,10 @@
   "author": "Wilmer Alex Quispe Quispe <q.wilmer.alex@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/waquispe/insac-field/issues"
+    "url": "https://github.com/waquispe/fields-creator/issues"
   },
-  "homepage": "https://github.com/waquispe/insac-field#readme",
+  "homepage": "https://github.com/waquispe/fields-creator#readme",
   "dependencies": {
-    "pg": "^7.4.1",
     "sequelize": "^4.32.7"
   },
   "devDependencies": {

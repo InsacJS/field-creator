@@ -1,4 +1,4 @@
-# Insac Field
+# Fields creator
 
 Simplifica la definición de atributos para crear un modelo Sequelize.
 
@@ -16,7 +16,10 @@ Tipos básicos:
 | `STRING`   | Atributo para representar cadenas de texto.                             |
 | `INTEGER`  | Atributo para representar números enteros.                              |
 | `FLOAT`    | Atributo para representar números en coma flotante.                     |
-| `ENUM`     | Atributo para representar valores.                                      |
+| `BOOLEAN`  | Atributo para representar valores booleanos.                            |
+| `DATE`     | Atributo para representar fechas (día y hora).                          |
+| `ENUM`     | Atributo para representar datos enumerados.                             |
+| `ARRAY`    | Atributo para representar una lista de valores.                         |
 
 Tipos personalizados:
 
@@ -34,22 +37,23 @@ Funciones adicionales:
 
 Para instalar sobre un proyecto, ejecutar el siguiente comando:
 
-$ `sudo npm install --save insac-field`
+$ `npm install --save fields-creator`
 
 # Ejemplos
+
 ## Ejemplo 1. Definición de modelos
 
 Podemos crear modelos Sequelize de la siguiente manera:
 
 Archivo `libro.model.js`
 ``` js
-const { Field } = require('insac-field')
+const { Field } = require('fields-creator')
 
 module.exports = (sequelize, Sequelize) => {
   return sequelize.define('libro', {
-    id: Field.ID(),
-    titulo: Field.STRING(10),
-    precio: Field.FLOAT()
+    id     : Field.ID(),
+    titulo : Field.STRING(10),
+    precio : Field.FLOAT()
   })
 }
 ```
@@ -59,14 +63,14 @@ Es lo mismo que hacer:
 module.exports = (sequelize, Sequelize) => {
   return sequelize.define('libro', {
     id: {
-      type: Sequelize.INTEGER(),
-      primaryKey: true,
-      autoIncrement: true,
-      allowNull: false,
-      validate: {
-        isInt: { args: [true] },
-        min: { args: [1] },
-        max: { args: [2147483647] }
+      type          : Sequelize.INTEGER(),
+      primaryKey    : true,
+      autoIncrement : true,
+      allowNull     : false,
+      validate      : {
+        isInt : { args: [true] },
+        min   : { args: [1] },
+        max   : { args: [2147483647] }
       }
     },
     titulo: {
@@ -78,63 +82,29 @@ module.exports = (sequelize, Sequelize) => {
     precio: {
       type: Sequelize.INTEGER(),
       validate: {
-        isFloat: { args: [true] },
-        min: { args: [0] },
-        max: { args: [1E+308] }
+        isFloat : { args: [true] },
+        min     : { args: [0] },
+        max     : { args: [1E+308] }
       }
     }
   })
 }
 ```
 
-## Ejemplo 2. Contenedor de atributos
+## Ejemplo 2. Definiendo grupos de fields
 
-Podemos crear un objeto que almacene los atributos de todos los modelos.
 ``` js
-const { Field, FieldContainer } = require('insac-field')
-
-const container = new FieldContainer()
-container.define('libro', {
-  id: Field.ID(),
-  titulo: Field.STRING(10),
-  precio: Field.FLOAT()
+const { Field, THIS } = require('fields-creator')
+const fieldGroup = Field.group(sequelize.models.libro, {
+  id_libro : THIS(),
+  titulo   : THIS({ allowNull: false }),
+  precio   : THIS({ allowNull: false }),
+  autor    : {
+    id_autor : THIS(),
+    nombre   : THIS()
+  },
+  custom: Field.STRING({ comment: 'custom' })
 })
 ```
 
-También podemos importar los atributos, indicando la carpeta donde se encuentran los modelos sequelize.
-``` js
-container.import('src/models', { ext: '.model.js' })
-```
-
-Podemos construir objetos en base a los atributos almacenados.
-``` js
-const OUTPUT = {
-  id: container.libro('id'),
-  titulo: container.libro('titulo'),
-  precio: container.libro('precio')
-}
-```
-
-Podemos construir objetos modificando algunas propiedades del atributo original.
-``` js
-const INPUT = {
-  titulo: container.libro('titulo', { allowNull: false }),
-  precio: container.libro('precio', { allowNull: false })
-}
-```
-
-Podemos construir objetos a partir de un modelo.
-``` js
-const { THIS } = require('insac-field')
-
-const INPUT = container.group('libro', {
-  titulo: THIS(),
-  precio: THIS({ allowNull: false }),
-  custom: THIS('model', { allowNull: false }),
-  autor: {
-    nombre: THIS()
-  }
-})
-```
 La función `THIS`, indica que el campo es parte del modelo definido en el `group`.
-Si se quiere obtener el campo de otro modelo, se le pasa como primer argumento el nombre del otro modelo.
