@@ -1,4 +1,4 @@
-# Fields creator
+# Field creator
 
 Simplifica la definición de atributos para crear un modelo Sequelize.
 
@@ -37,7 +37,7 @@ Funciones adicionales:
 
 Para instalar sobre un proyecto, ejecutar el siguiente comando:
 
-$ `npm install --save fields-creator`
+$ `npm install --save field-creator`
 
 # Ejemplos
 
@@ -47,7 +47,7 @@ Podemos crear modelos Sequelize de la siguiente manera:
 
 Archivo `libro.model.js`
 ``` js
-const { Field } = require('fields-creator')
+const { Field } = require('field-creator')
 
 module.exports = (sequelize, Sequelize) => {
   return sequelize.define('libro', {
@@ -94,7 +94,7 @@ module.exports = (sequelize, Sequelize) => {
 ## Ejemplo 2. Definiendo grupos de fields
 
 ``` js
-const { Field, THIS } = require('fields-creator')
+const { Field, THIS } = require('field-creator')
 const fieldGroup = Field.group(sequelize.models.libro, {
   id_libro : THIS(),
   titulo   : THIS({ allowNull: false }),
