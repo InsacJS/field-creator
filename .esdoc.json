@@ -12,9 +12,9 @@
         "coverage": { "enable": true },
         "typeInference": { "enable": true },
         "brand": {
-          "title": "Insac Field",
+          "title": "Field Creator",
           "description": "Simplifica la definición de atributos para crear un modelo Sequelize.",
-          "repository": "https://github.com/waquispe/insac-field"
+          "repository": "https://github.com/waquispe/field-creator"
         }
       }
     }
