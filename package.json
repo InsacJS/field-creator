@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/waquispe/field-creator#readme",
   "dependencies": {
+    "pg": "^7.4.1",
     "sequelize": "^4.32.7"
   },
   "devDependencies": {
