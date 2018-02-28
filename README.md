@@ -1,4 +1,4 @@
-# Field creator
+# Field Creator
 
 Simplifica la definición de atributos para crear un modelo Sequelize.
 
