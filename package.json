@@ -1,6 +1,6 @@
 {
   "name": "field-creator",
-  "version": "1.1.2",
+  "version": "1.1.0",
   "description": "Simplifica la definición de atributos para crear un modelo Sequelize.",
   "main": "index.js",
   "directories": {
