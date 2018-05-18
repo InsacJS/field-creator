@@ -14,7 +14,7 @@
         "brand": {
           "title": "Field Creator",
           "description": "Simplifica la definición de atributos para crear un modelo Sequelize.",
-          "repository": "https://github.com/waquispe/field-creator"
+          "repository": "https://github.com/insacjs/field-creator"
         }
       }
     }

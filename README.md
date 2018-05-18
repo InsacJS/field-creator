@@ -4,7 +4,7 @@ Sequelize es una excelente herramienta para realizar consultas con la base de da
 
 Aprovechando la implementación de estos modelos, Field Creator permite reutilizar estas propiedades para crear objetos de tipo FieldGroup que pueden ser utilizados en todas estas situaciones.
 
-Ademas se cuenta con una serie de campos predefinidos que facilitan la creación de modelos.
+Además se cuenta con una serie de campos predefinidos que facilitan la creación de modelos.
 
 ## Características
 
