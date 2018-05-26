@@ -13,22 +13,22 @@ Además se cuenta con una serie de campos predefinidos que facilitan la creació
 
 ## Tipos de datos predefinidos
 
-| Tipo       | Descripción                                  |
-|------------|----------------------------------------------|
-| `ID`       | Clave primaria.                              |
-| `STRING`   | Cadena de texto.                             |
-| `TEXT`     | Bloque de texto.                             |
-| `INTEGER`  | Número entero.                               |
-| `FLOAT`    | Número en coma flotante.                     |
-| `BOOLEAN`  | Valor booleano.                              |
-| `DATE`     | Fecha (día y hora).                          |
-| `DATEONLY` | Solamente fecha.                             |
-| `TIME`     | Solamente hora.                              |
-| `JSON`     | Objeto de tipo JSON.                         |
-| `JSONB`    | Objeto de tipo JSONB.                        |
-| `UUID`     | Código de tipo UUID.                         |
-| `ENUM`     | Tipo enumerado.                              |
-| `ARRAY`    | Lista de valores.                            |
+| Tipo       | Descripción                  | Validadores por defecto                    |
+|------------|------------------------------|--------------------------------------------|
+| `ID`       | Clave primaria.              | isInt: `true`, min: `1`, max: `2147483647` |
+| `STRING`   | Cadena de texto.             | len: `[0, LENGHT]`                         |
+| `TEXT`     | Bloque de texto.             | len: `[0, 2147483647]`                     |
+| `INTEGER`  | Número entero.               | isInt: `true`, min: `0`, max: `2147483647` |
+| `FLOAT`    | Número en coma flotante.     | isFloat: `true`, min: `0`, max: `1E+308`   |
+| `BOOLEAN`  | Valor booleano.              | isBoolean: `true`                          |
+| `DATE`     | Fecha (día y hora).          | isDate: `true`                             |
+| `DATEONLY` | Solamente fecha.             | isDate: `true`                             |
+| `TIME`     | Solamente hora.              | isTime: `custom`                           |
+| `JSON`     | Objeto de tipo JSON.         | isJson: `custom`                           |
+| `JSONB`    | Objeto de tipo JSONB.        | isJson: `custom`                           |
+| `UUID`     | Código de tipo UUID.         | isUUID: `4`                                |
+| `ENUM`     | Tipo enumerado.              | isIn: `[VALUES]`                           |
+| `ARRAY`    | Lista de valores.            | isArray: `custom`                          |
 
 ## Propiedades de un atributo
 
@@ -58,8 +58,85 @@ const ID = Field.INTEGER({
   comment       : 'Identificador único.',
   uniqueMsg     : 'El campo ID debe ser único.',
   allowNullMsg  : 'El campo ID es requerido.',
-  validate      : { min: { args: [1], msg: 'Debe ser mayor o igual a 1.' } },
+  validate      : { min: { args: 1, msg: 'Debe ser mayor o igual a 1.' } },
 })
+```
+
+## Propiedad validate
+
+Un validador puede tener uno de los siguientes formatos:
+
+```js
+const validate = { min: 10 }
+const validate = { min: { args: 10 } }
+const validate = { min: { args: 10, msg: 'Mensaje de error personalizado.' } }
+
+const validate = { len: [2, 5] }
+const validate = { len: { args: [2, 5] } }
+const validate = { len: { args: [2, 5], msg: 'Mensaje de error personalizado.' } }
+
+const validate = { isIn: [['A', 'B']] }
+const validate = { isIn: { args: [['A', 'B']] } }
+const validate = { isIn: { args: [['A', 'B']], msg: 'Mensaje de error personalizado.' } }
+```
+
+Cuando se trata de validadores booleanos, son válidos los siguientes formatos:
+
+```js
+const validate = { isEmail: true }
+const validate = { isEmail: { msg: 'Mensaje de error personalizado.' } }
+```
+
+Para validadores personalizados:
+
+```js
+const validate = {
+  esNumeroPar: (value) => {
+    if (parseInt(value) % 2 !== 0) {
+      throw new Error(`Debe ser un número par.`)
+    }
+  }
+}
+```
+
+## Lista de validadores
+
+A continuación se encuentra una lista de validadores. Puede encontrar más información en: [http://docs.sequelizejs.com/manual/tutorial/models-definition.html#validations](http://docs.sequelizejs.com/manual/tutorial/models-definition.html#validations)
+
+```js
+const validate = {
+  is             : ['^[a-z]+$', 'i'],
+  is             : /^[a-z]+$/i,      
+  not            : ['[a-z]', 'i'],   
+  isEmail        : true,             
+  isUrl          : true,             
+  isIP           : true,             
+  isIPv4         : true,             
+  isIPv6         : true,             
+  isAlpha        : true,             
+  isAlphanumeric : true,             
+  isNumeric      : true,             
+  isInt          : true,             
+  isFloat        : true,             
+  isDecimal      : true,             
+  isLowercase    : true,             
+  isUppercase    : true,             
+  isNull         : true,             
+  notEmpty       : true,             
+  equals         : 'ABC123',   
+  contains       : 'def',      
+  notContains    : 'def',      
+  notIn          : [['A', 'B']],     
+  isIn           : [['A', 'B']],     
+  len            : [2, 5],           
+  isUUID         : 4,                
+  isDate         : true,             
+  isAfter        : '2010-05-30',
+  isBefore       : '2020-05-30',
+  min            : 10,                
+  max            : 12,               
+  isCreditCard   : true,            
+}
 ```
 
 ## Función `CLONE`
@@ -149,23 +226,23 @@ const LIBRO = sequelize.define('libro', {
     autoIncrement : true,
     allowNull     : false,
     validate      : {
-      isInt : { args: [true] },
-      min   : { args: [1] },
-      max   : { args: [2147483647] }
+      isInt : true,
+      min   : 1,
+      max   : 2147483647
     }
   },
   titulo: {
     type: Sequelize.STRING(10),
     validate: {
-      len: { args: [0, 10] }
+      len: [0, 10]
     }
   },
   precio: {
-    type: Sequelize.INTEGER(),
+    type: Sequelize.FLOAT(),
     validate: {
-      isFloat : { args: [true] },
-      min     : { args: [0] },
-      max     : { args: [1E+308] }
+      isFloat : true,
+      min     : 0,
+      max     : 1E+308
     }
   }
 })

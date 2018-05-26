@@ -2,7 +2,7 @@
 const Field     = require('../../lib/class/Field')
 const path      = require('path')
 const Sequelize = require('sequelize')
-const DB_CONFIG = require('./db_config')
+const DB_CONFIG = require('../db_config')
 
 describe('\n - Clase: Field\n', () => {
   describe(` Método: ID`, () => {
@@ -14,11 +14,9 @@ describe('\n - Clase: Field\n', () => {
       expect(FIELD).to.have.property('allowNull', false)
       expect(FIELD).to.have.property('autoIncrement', true)
       expect(FIELD).to.have.property('validate')
-      expect(FIELD.validate).to.have.property('isInt', true)
+      expect(FIELD.validate).to.have.property('isInt')
       expect(FIELD.validate).to.have.property('min')
-      expect(FIELD.validate.min[0]).to.equal(1)
       expect(FIELD.validate).to.have.property('max')
-      expect(FIELD.validate.max[0]).to.equal(2147483647)
     })
     it('Ejecución con parámetros', () => {
       const params = { comment: 'ID field', validate: null }
@@ -35,15 +33,12 @@ describe('\n - Clase: Field\n', () => {
       expect(FIELD.type).to.have.property('key', 'STRING')
       expect(FIELD).to.have.property('validate')
       expect(FIELD.validate).to.have.property('len')
-      expect(FIELD.validate.len).to.be.an('array').to.have.lengthOf(2)
-      expect(FIELD.validate.len[0]).to.equal(0)
-      expect(FIELD.validate.len[1]).to.equal(255)
     })
     it('Ejecución con 1 parámetro de tipo entero', () => {
       const length = 10
       const FIELD = Field.STRING(length)
       expect(FIELD.type).to.have.property('_length', length)
-      expect(FIELD.validate.len[1]).to.equal(length)
+      expect(FIELD.validate.len.args[1]).to.equal(length)
     })
     it('Ejecución con 1 parámetro de tipo objeto', () => {
       const params = { comment: 'String field', validate: null }
@@ -67,11 +62,9 @@ describe('\n - Clase: Field\n', () => {
       expect(FIELD).to.have.property('type')
       expect(FIELD.type).to.have.property('key', 'INTEGER')
       expect(FIELD).to.have.property('validate')
-      expect(FIELD.validate).to.have.property('isInt', true)
+      expect(FIELD.validate).to.have.property('isInt')
       expect(FIELD.validate).to.have.property('min')
-      expect(FIELD.validate.min[0]).to.equal(0)
       expect(FIELD.validate).to.have.property('max')
-      expect(FIELD.validate.max[0]).to.equal(2147483647)
     })
   })
 
@@ -81,11 +74,9 @@ describe('\n - Clase: Field\n', () => {
       expect(FIELD).to.have.property('type')
       expect(FIELD.type).to.have.property('key', 'FLOAT')
       expect(FIELD).to.have.property('validate')
-      expect(FIELD.validate).to.have.property('isFloat', true)
+      expect(FIELD.validate).to.have.property('isFloat')
       expect(FIELD.validate).to.have.property('min')
-      expect(FIELD.validate.min[0]).to.equal(0)
       expect(FIELD.validate).to.have.property('max')
-      expect(FIELD.validate.max[0]).to.equal(1E+308)
     })
   })
 
@@ -97,7 +88,6 @@ describe('\n - Clase: Field\n', () => {
       expect(FIELD.type).to.have.property('key', 'ENUM')
       expect(FIELD).to.have.property('validate')
       expect(FIELD.validate).to.have.property('isIn')
-      expect(FIELD.validate.isIn[0]).to.be.an('array').to.have.lengthOf(values.length)
     })
   })
 
