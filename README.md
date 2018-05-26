@@ -101,7 +101,7 @@ const validate = {
 
 ## Lista de validadores
 
-A continuación se encuentra una lista de validadores. Puede encontrar más información en: [http://docs.sequelizejs.com/manual/tutorial/models-definition.html#validations](http://docs.sequelizejs.com/manual/tutorial/models-definition.html#validations)
+A continuación se muestra una lista de opciones de la propiedad `validate`. Puede encontrar más información en: [http://docs.sequelizejs.com/manual/tutorial/models-definition.html#validations](http://docs.sequelizejs.com/manual/tutorial/models-definition.html#validations)
 
 ```js
 const validate = {
