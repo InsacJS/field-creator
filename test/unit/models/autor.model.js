@@ -9,7 +9,9 @@ module.exports = (sequelize, Sequelize) => {
   })
 
   MODEL.associate = (models) => {
-    models.autor.hasMany(models.libro, { as: 'libros', foreignKey: { name: 'fid_autor' } })
+    const AUTOR = models.autor
+    const LIBRO = models.libro
+    AUTOR.hasMany(LIBRO, { as: 'libros', foreignKey: { name: 'fid_autor' } })
   }
 
   return MODEL

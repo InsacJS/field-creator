@@ -5,16 +5,6 @@ const DB_CONFIG = require('../db_config')
 
 describe('\n - Creación de campos con diferentes validadores\n', () => {
   describe(` Validadores por defecto`, () => {
-    it('Validador de tipo ID', () => {
-      const FIELD = Field.ID()
-      expect(FIELD.validate).to.have.property('isInt')
-      expect(FIELD.validate.isInt).to.be.an('boolean', true)
-      expect(FIELD.validate).to.have.property('min')
-      expect(FIELD.validate.min).to.be.an('object')
-      expect(FIELD.validate.min.args[0]).to.equal(1)
-      expect(FIELD.validate).to.have.property('max')
-      expect(FIELD.validate.max.args).to.equal(2147483647)
-    })
     it('Validador de tipo STRING', () => {
       const FIELD = Field.STRING()
       expect(FIELD.validate).to.have.property('len')

@@ -15,7 +15,6 @@ Además se cuenta con una serie de campos predefinidos que facilitan la creació
 
 | Tipo       | Descripción                  | Validadores por defecto                    |
 |------------|------------------------------|--------------------------------------------|
-| `ID`       | Clave primaria.              | isInt: `true`, min: `1`, max: `2147483647` |
 | `STRING`   | Cadena de texto.             | len: `[0, LENGHT]`                         |
 | `TEXT`     | Bloque de texto.             | len: `[0, 2147483647]`                     |
 | `INTEGER`  | Número entero.               | isInt: `true`, min: `0`, max: `2147483647` |
@@ -139,7 +138,7 @@ const validate = {
 }
 ```
 
-## Función `CLONE`
+## Función `clone`
 
 Crea una copia a partir de otro atributo, modificando algunas de sus propiedades si fuera necesario.
 
@@ -147,8 +146,27 @@ Crea una copia a partir de otro atributo, modificando algunas de sus propiedades
 const ID = Field.ID()
 
 const INPUT = {
-  id: Field.CLONE(ID, { allowNull: false })
+  id: Field.clone(ID, { allowNull: false })
 }
+```
+
+## Función `add`
+
+Adiciona un tipo de dato personalizado que luego puede ser utilizado como un tipo de dato básico.
+
+```js
+Field.add('ID', Field.INTEGER({
+  primaryKey    : true,
+  autoIncrement : true,
+  allowNull     : false,
+  validate      : { min: 1 }
+}))
+
+const AUTOR = sequelize.define('autor', {
+  id     : Field.ID(),
+  titulo : Field.STRING(),
+  precio : Field.FLOAT()
+})
 ```
 
 ## Función `group`
@@ -206,17 +224,7 @@ $ `npm install --save field-creator`
 
 ## Ejemplo 1. Creando un modelo
 
-Definiendo modelos de esta forma:
-
-``` js
-const LIBRO = sequelize.define('libro', {
-  id_libro : Field.ID(),
-  titulo   : Field.STRING(10),
-  precio   : Field.FLOAT()
-})
-```
-
-Es lo mismo que hacer:
+Definición de un modelo `libro` de la forma tradicional:
 
 ``` js
 const LIBRO = sequelize.define('libro', {
@@ -245,6 +253,24 @@ const LIBRO = sequelize.define('libro', {
       max     : 1E+308
     }
   }
+})
+```
+
+Definición del mismo modelo `libro` utilizando la librería:
+``` js
+Field.add('ID', Field.INTEGER({
+  primaryKey    : true,
+  autoIncrement : true,
+  allowNull     : false,
+  validate      : { min: 1 }
+}))
+```
+
+``` js
+const LIBRO = sequelize.define('libro', {
+  id_libro : Field.ID(),
+  titulo   : Field.STRING(10),
+  precio   : Field.FLOAT()
 })
 ```
 

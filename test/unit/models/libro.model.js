@@ -8,10 +8,9 @@ module.exports = (sequelize, Sequelize) => {
   })
 
   MODEL.associate = (models) => {
-    models.libro.belongsTo(models.autor, {
-      as         : 'autor',
-      foreignKey : { name: 'fid_autor', targetKey: 'id_autor', allowNull: false }
-    })
+    const LIBRO = models.libro
+    const AUTOR = models.autor
+    LIBRO.belongsTo(AUTOR, { as: 'autor', foreignKey: { name: 'fid_autor', targetKey: 'id_autor', allowNull: false } })
   }
 
   return MODEL
