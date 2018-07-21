@@ -9,9 +9,11 @@ Además se cuenta con una serie de campos predefinidos que facilitan la creació
 ## Características
 
 - Es posible crear atributos predefinidos que con la propiedad `validate` incluida por defecto.
-- Es posible crear objetos de tipo `FieldGroup`.
+- Es posible crear objetos de tipo `FieldGroup`. Un fieldGroup es un objeto formado por los campos de los modelos.
+- Incluye varios tipos de datos personalizados.
+- Los tipos de datos personalizados pueden ser sobreescritos con el método `add` junto con la opción `{ force: true }`.
 
-## Tipos de datos predefinidos
+## Tipos de datos básicos
 
 | Tipo       | Descripción                  | Validadores por defecto                    |
 |------------|------------------------------|--------------------------------------------|
@@ -29,20 +31,155 @@ Además se cuenta con una serie de campos predefinidos que facilitan la creació
 | `ENUM`     | Tipo enumerado.              | isIn: `[VALUES]`                           |
 | `ARRAY`    | Lista de valores.            | isArray: `custom`                          |
 
+## Tipos de datos personalizados
+
+Algunos tipos de datos se usan con mayor frecuencia, es por eso que se definieron en base a los tipos de datos básicos.
+
+### - Clave primaria
+
+```js
+Field.add('ID', Field.INTEGER({
+  primaryKey    : true,
+  autoIncrement : true,
+  allowNull     : false,
+  validate      : { min: 1 }
+}))
+Field.add('PK_INTEGER', Field.INTEGER({
+  primaryKey : true,
+  allowNull  : false,
+  validate   : { min: 1 }
+}))
+Field.add('PK_UUID', Field.UUID({
+  primaryKey : true,
+  allowNull  : false
+}))
+```
+
+### - Auditoria
+
+```js
+Field.add('_STATUS', Field.ENUM(['ACTIVO', 'INACTIVO', 'ELIMINADO'], {
+  comment      : 'Estado en el que se encuentra el registro.',
+  defaultValue : 'ACTIVO'
+}))
+Field.add('_CREATED_AT', Field.DATE({
+  comment: 'Fecha de creación del registro.'
+}))
+Field.add('_UPDATED_AT', Field.DATE({
+  comment: 'Fecha de modificación del registro.'
+}))
+Field.add('_DELETED_AT', Field.DATE({
+  comment: 'Fecha de eliminación del registro.'
+}))
+Field.add('_CREATED_USER', Field.INTEGER({
+  comment: 'ID del usuario que crea el registro.'
+}))
+Field.add('_UPDATED_USER', Field.INTEGER({
+  comment: 'ID del usuario que modifica el registro.'
+}))
+Field.add('_DELETED_USER', Field.INTEGER({
+  comment: 'ID del usuario que elimina el registro.'
+}))
+
+```
+
+### - Filtros y consultas
+
+```js
+Field.add('FIELDS', Field.STRING({
+  comment : 'Campos a devolver en el resultado.',
+  example : 'id_usuario,username,persona(id_persona,nombres)'
+}))
+Field.add('ORDER', Field.STRING({
+  comment : 'Orden en el que se devolverá el resultado.',
+  example : 'apellido,-nombres'
+}))
+Field.add('LIMIT', Field.INTEGER({
+  comment      : 'Límite de registros por página.',
+  defaultValue : 50,
+  validate     : { min: 1 }
+}))
+Field.add('PAGE', Field.INTEGER({
+  comment      : 'Número de página de una lista de registros.',
+  defaultValue : 1,
+  validate     : { min: 1 }
+}))
+
+```
+
+### - Autenticación
+
+```js
+Field.add('BASIC_AUTHORIZATION', Field.TEXT({
+  comment : 'Credenciales de acceso. <code>Basic [username:password] base64</code>',
+  example : 'Basic FDS234SF=='
+}))
+Field.add('BEARER_AUTHORIZATION', Field.TEXT({
+  comment : 'Credenciales del acceso. <code>Bearer [accessToken]</code>',
+  example : 'Bearer s83hs7.sdf423.f23f'
+}))
+Field.add('ACCESS_TOKEN', Field.TEXT({
+  comment : 'Token de acceso.',
+  example : 's83hs7.sdf423.f23f'
+}))
+Field.add('REFRESH_TOKEN', Field.TEXT({
+  comment : 'Token de refresco.',
+  example : 's83hs7.sdf423.f23f'
+}))
+Field.add('TOKEN_EXPIRATION_DATE', Field.DATE({
+  comment: 'Fecha de expiración del token.'
+}))
+Field.add('TOKEN_EXPIRE_IN', Field.DATE({
+  comment : 'Tiempo de expiración del token en segundos.',
+  example : '86400'
+}))
+Field.add('TOKEN_TYPE', Field.DATE({
+  comment : 'Tipo de token.',
+  example : 'Bearer'
+}))
+Field.add('ACCESS_TYPE', Field.ENUM(['offline', 'online'], {
+  comment      : 'Parámetro que indica el tipo de acceso. <code>offline</code> incluirá en la respuesta un token de refresco.',
+  defaultValue : 'online'
+}))
+Field.add('USERNAME', Field.STRING(100, {
+  comment  : 'Nombre de usuario.',
+  example  : 'admin',
+  validate : { len: { args: [3, 100], msg: 'El nombre de usuario debe tener entre 3 y 100 caracteres.' } }
+}))
+Field.add('PASSWORD', Field.STRING(50, {
+  comment  : 'Contraseña de usuario.',
+  example  : '123',
+  validate : { len: { args: [3, 50], msg: 'La contraseña debe tener entre 3 y 50 caracteres.' } }
+}))
+
+```
+
+### - Otros tipos de datos
+
+```js
+Field.add('EMAIL', Field.STRING({
+  comment  : 'Dirección de correo electrónico',
+  example  : 'alguien@example.com',
+  validate : { isEmail: true }
+}))
+```
+
 ## Propiedades de un atributo
 
-| Propiedad       | Descripción                                |
-| ----------------|--------------------------------------------|
-| `primaryKey`    | Indica si es una clave primaria.           |
-| `autoIncrement` | Indica si es autoincrementable.            |
-| `unique`        | Indica si el registro debe ser único.      |
-| `defaultValue`  | Valor por defecto.                         |
-| `example`       | Valor de ejemplo.                          |
-| `allowNull`     | Indica si acepta valores nulos.            |
-| `comment`       | Descripción del atributo.                  |
-| `uniqueMsg`     | Mensaje de error para validar `unique`.    |
-| `allowNullMsg`  | Mensaje de error para validar `allowNull`. |
-| `validate`      | Objeto para validar el tipo de dato.       |
+| Propiedad         | Descripción                                                         |
+| ------------------|---------------------------------------------------------------------|
+| `primaryKey`      | Indica si es una clave primaria.                                    |
+| `autoIncrement`   | Indica si es autoincrementable.                                     |
+| `unique`          | Indica si el registro debe ser único.                               |
+| `defaultValue`    | Valor por defecto.                                                  |
+| `example`         | Valor de ejemplo.                                                   |
+| `allowNull`       | Indica si el campo acepta valores nulos.                            |
+| `allowNullObj`    | Indica si el objeto al que pertenece el campo acepta valores nulos. |
+| `comment`         | Descripción del atributo.                                           |
+| `uniqueMsg`       | Mensaje de error para validar `unique`.                             |
+| `allowNullMsg`    | Mensaje de error para validar `allowNull`.                          |
+| `allowNullObjMsg` | Mensaje de error para validar `allowNullObj`.                       |
+| `validate`        | Objeto para validar el tipo de dato.                                |
 
 A continuación se muestra un ejemplo para crear un campo de tipo ID:
 
@@ -155,16 +292,20 @@ const INPUT = {
 Adiciona un tipo de dato personalizado que luego puede ser utilizado como un tipo de dato básico.
 
 ```js
-Field.add('ID', Field.INTEGER({
-  primaryKey    : true,
-  autoIncrement : true,
-  allowNull     : false,
-  validate      : { min: 1 }
+// Es posible adicionar nuevos tipos de datos.
+Field.add('TITULO', Field.INTEGER({
+  comment: 'Título del libro'
 }))
+
+// Es posible actualizar los valores de un tipo de dato personalizado.
+Field.add('ID', Field.INTEGER({
+  comment       : 'Identificador único',
+  autoIncrement : false
+}), { force: true })
 
 const AUTOR = sequelize.define('autor', {
   id     : Field.ID(),
-  titulo : Field.STRING(),
+  titulo : Field.TITULO(),
   precio : Field.FLOAT()
 })
 ```
@@ -257,14 +398,6 @@ const LIBRO = sequelize.define('libro', {
 ```
 
 Definición del mismo modelo `libro` utilizando la librería:
-``` js
-Field.add('ID', Field.INTEGER({
-  primaryKey    : true,
-  autoIncrement : true,
-  allowNull     : false,
-  validate      : { min: 1 }
-}))
-```
 
 ``` js
 const LIBRO = sequelize.define('libro', {

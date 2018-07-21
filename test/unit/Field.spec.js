@@ -92,19 +92,38 @@ describe('\n - Clase: Field\n', () => {
     it('Ejecución sin parámetros', () => {
       const STR = Field.STRING()
       expect(STR).to.not.have.property('allowNull')
-      Field.add('CUSTOM_FIELD_ONE', STR)
-      const CUSTOM_ONE = Field.CUSTOM_FIELD_ONE({ allowNull: false })
-      expect(CUSTOM_ONE.type.key).to.equal('STRING')
-      expect(CUSTOM_ONE).to.have.property('allowNull', false)
+      Field.add('ONE', STR)
+      const ONE = Field.ONE({ allowNull: false })
+      expect(ONE.type.key).to.equal('STRING')
+      expect(ONE).to.have.property('allowNull', false)
     })
     it('Ejecución con parámetros', () => {
       const STR = Field.STRING({ allowNull: false })
       expect(STR).to.have.property('allowNull', false)
-      Field.add('CUSTOM_FIELD_TWO', STR)
-      const CUSTOM_TWO = Field.CUSTOM_FIELD_TWO({ allowNull: true, comment: 'Comment' })
-      expect(CUSTOM_TWO.type.key).to.equal('STRING')
-      expect(CUSTOM_TWO).to.have.property('allowNull', true)
-      expect(CUSTOM_TWO).to.have.property('comment', 'Comment')
+      Field.add('TWO', STR)
+      const TWO = Field.TWO({ allowNull: true, comment: 'Comment' })
+      expect(TWO.type.key).to.equal('STRING')
+      expect(TWO).to.have.property('allowNull', true)
+      expect(TWO).to.have.property('comment', 'Comment')
+    })
+    it('Sobreescribiendo tipos de datos', () => {
+      Field.add('A', Field.STRING({ comment: 'A1' }), { force: true })
+      expect(Field.A().type.key).to.equal('STRING')
+      expect(Field.A().comment).to.equal('A1')
+      Field.add('A', Field.STRING({ comment: 'A2' }), { force: true })
+      expect(Field.A().type.key).to.equal('STRING')
+      expect(Field.A().comment).to.equal('A2')
+      Field.add('A', Field.INTEGER({ comment: 'A3' }), { force: true })
+      expect(Field.A().type.key).to.equal('INTEGER')
+      expect(Field.A().comment).to.equal('A3')
+      try {
+        Field.add('ID', Field.ID())
+        throw new Error('Otro error')
+      } catch (e) {
+        expect(e).to.have.property('message', `El tipo de dato 'ID' ya ha sido definido.`)
+      }
+      Field.add('ID', Field.ID({ comment: 'Custom ID comment.' }), { force: true })
+      expect(Field.ID().comment).to.equal('Custom ID comment.')
     })
   })
 
@@ -112,14 +131,6 @@ describe('\n - Clase: Field\n', () => {
     it('Ejecución con parámetros', () => {
       const sequelize = new Sequelize(DB_CONFIG.database, DB_CONFIG.username, DB_CONFIG.password, DB_CONFIG.params)
       const pathModels = path.resolve(__dirname, './models')
-
-      Field.add('ID', Field.INTEGER({
-        primaryKey    : true,
-        autoIncrement : true,
-        allowNull     : false,
-        validate      : { min: 1 }
-      }))
-
       sequelize.import(`${pathModels}/autor.model.js`)
       sequelize.import(`${pathModels}/libro.model.js`)
       sequelize.models.autor.associate(sequelize.models)
