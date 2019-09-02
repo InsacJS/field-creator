@@ -120,7 +120,7 @@ describe('\n - Clase: Field\n', () => {
         Field.add('ID', Field.ID())
         throw new Error('Otro error')
       } catch (e) {
-        expect(e).to.have.property('message', `El tipo de dato 'ID' ya ha sido definido`)
+        expect(e).to.have.property('message', 'El tipo de dato \'ID\' ya ha sido definido')
       }
       Field.add('ID', Field.ID({ comment: 'Custom ID comment.' }), { force: true })
       expect(Field.ID().comment).to.equal('Custom ID comment.')
