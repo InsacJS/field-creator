@@ -10,7 +10,6 @@ module.exports = {
       underscored     : true,
       freezeTableName : true,
       timestamps      : false
-    },
-    operatorsAliases: false
+    }
   }
 }

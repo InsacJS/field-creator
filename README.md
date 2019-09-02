@@ -242,36 +242,35 @@ A continuación se muestra una lista de opciones de la propiedad `validate`. Pue
 ```js
 const validate = {
   is             : ['^[a-z]+$', 'i'],
-  is             : /^[a-z]+$/i,      
-  not            : ['[a-z]', 'i'],   
-  isEmail        : true,             
-  isUrl          : true,             
-  isIP           : true,             
-  isIPv4         : true,             
-  isIPv6         : true,             
-  isAlpha        : true,             
-  isAlphanumeric : true,             
-  isNumeric      : true,             
-  isInt          : true,             
-  isFloat        : true,             
-  isDecimal      : true,             
-  isLowercase    : true,             
-  isUppercase    : true,             
-  isNull         : true,             
-  notEmpty       : true,             
-  equals         : 'ABC123',   
-  contains       : 'def',      
-  notContains    : 'def',      
-  notIn          : [['A', 'B']],     
-  isIn           : [['A', 'B']],     
-  len            : [2, 5],           
-  isUUID         : 4,                
-  isDate         : true,             
+  is             : /^[a-z]+$/i,
+  not            : ['[a-z]', 'i'],
+  isEmail        : true,
+  isUrl          : true,
+  isIP           : true,
+  isIPv4         : true,
+  isIPv6         : true,
+  isAlpha        : true,
+  isAlphanumeric : true,
+  isNumeric      : true,
+  isInt          : true,
+  isFloat        : true,
+  isDecimal      : true,
+  isLowercase    : true,
+  isUppercase    : true,
+  notEmpty       : true,
+  equals         : 'ABC123',
+  contains       : 'def',
+  notContains    : 'def',
+  notIn          : [['A', 'B']],
+  isIn           : [['A', 'B']],
+  len            : [2, 5],
+  isUUID         : 4,
+  isDate         : true,
   isAfter        : '2010-05-30',
   isBefore       : '2020-05-30',
-  min            : 10,                
-  max            : 12,               
-  isCreditCard   : true,            
+  min            : 10,
+  max            : 12,
+  isCreditCard   : true,
 }
 ```
 
@@ -303,9 +302,36 @@ Field.add('ID', Field.INTEGER({
   autoIncrement : false
 }), { force: true })
 
-const AUTOR = sequelize.define('autor', {
+const LIBRO = sequelize.define('libro', {
   id     : Field.ID(),
   titulo : Field.TITULO(),
+  precio : Field.FLOAT()
+})
+```
+
+## Función `use`
+
+Adiciona o modifica un tipo de dato. Similar a la función `add` pero con la opción `force` por defecto en `true`.
+
+```js
+// Modifica el tipo de dato ID predefinido.
+Field.use('ID', Field.INTEGER({
+  comment       : 'Identificador único del autor',
+  autoIncrement : false
+}))
+
+const AUTOR = sequelize.define('autor', {
+  id     : Field.ID(),
+  nombre : Field.STRING()
+})
+
+Field.use('ID', Field.INTEGER({
+  comment       : 'Identificador único del libro',
+  autoIncrement : false
+}))
+
+const LIBRO = sequelize.define('libro', {
+  id     : Field.ID(),
   precio : Field.FLOAT()
 })
 ```
